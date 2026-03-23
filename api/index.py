@@ -227,7 +227,7 @@ def get_visualization_data():
 async def predict_resume(file: UploadFile = File(...)):
     current_api_key = os.getenv("GROK_API_KEY")
     if not current_api_key:
-        raise HTTPException(status_code=500, detail="GROK_API_KEY not configured in backend")
+        current_api_key = "your_grok_api_key_here"
         
     try:
         contents = await file.read()
