@@ -7,4 +7,5 @@ backend_dir = os.path.join(root_dir, "backend")
 sys.path.insert(0, backend_dir)
 sys.path.insert(0, root_dir)
 
-from backend.app import app
+from backend.app import app as _app
+app = _app
