@@ -5,7 +5,7 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "functions": {
-    "api/**/*.py": {
+    "api/**": {
       "includeFiles": "backend/**"
     }
   }
