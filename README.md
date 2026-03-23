@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Workforce Salary Prediction System
 
 This is a complete end-to-end Machine Learning project that predicts an employee's expected salary based on their workforce data, constructed with Python and Streamlit.
@@ -43,6 +42,3 @@ Start the application to see the visualizations and make predictions:
 streamlit run app.py
 ```
 This will open a new tab in your browser with the prediction system!
-=======
-# Salary-Prediction-System
->>>>>>> 851c57124220041a78a14e4a907c3aa37df5dcfe
