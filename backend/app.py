@@ -1,5 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
 import pandas as pd
@@ -179,6 +181,9 @@ async def predict_batch(file: UploadFile = File(...)):
         formatted_df = df.copy()
         formatted_df['Predicted Salary (₹)'] = formatted_df['Predicted Salary (₹)'].apply(lambda x: f"₹{x:,.2f}")
         
+        import numpy as np
+        formatted_df = formatted_df.replace({np.nan: None})
+        
         return {"results": formatted_df.to_dict(orient="records")}
         
     except Exception as e:
@@ -353,6 +358,22 @@ async def predict_resume(file: UploadFile = File(...)):
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Connect the frontend
+FRONTEND_DIST = os.path.join(os.path.dirname(CURRENT_DIR), "frontend", "dist")
+if os.path.exists(FRONTEND_DIST):
+    assets_dir = os.path.join(FRONTEND_DIST, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/{catchall:path}")
+    def serve_frontend(catchall: str):
+        if catchall.startswith("api/"):
+            raise HTTPException(status_code=404, detail="API route not found")
+        index_file = os.path.join(FRONTEND_DIST, "index.html")
+        if os.path.exists(index_file):
+            return FileResponse(index_file)
+        raise HTTPException(status_code=404, detail="Frontend index not found")
 
 if __name__ == "__main__":
     import uvicorn
